@@ -53,13 +53,13 @@ Button(tubeDownload,text='foo',command=bar).pack()
 
 '''
 
-
+import platform
 import os
 typeOfF=typeN.get()
 url=urlN.get()
 addr=addrN.get()
 name=NameN.get()
-
+platform=platform.system()
 if(typeOfF.lower()=='audio'):
     import pytube
     import subprocess
@@ -72,17 +72,31 @@ if(typeOfF.lower()=='audio'):
     addr=addr+"/"+name
     default_filename=reqFile.default_filename
     subprocess.call(['ffmpeg','-i',os.path.join(temp,default_filename),os.path.join(temp,addr)])
-    dele="rm "+"*.webm"
-    os.system(dele)
-    dele="rm "+"*.mp4"
-    os.system(dele)
+    if(platform=="Windows"):
+    	delet="del "+"*.webm"
+    	os.system(delet)
+    	delet="del "+"*.mp4"
+    	os.system(delet)
+    	os.system('cls')
+    else:
+    	delet="rm "+"*.webm"
+    	os.system(delet)
+    	delet="rm "+"*.mp4"
+    	os.system(delet)
+    	os.system('clear')
 else:
     import youtube_dl as ydl
     ydata=ydl.YoutubeDL({'outtmpl':'%(id)s%(ext)s'})
+
     with ydata:
         result=ydata.extract_info(url)
+    
     name=name.replace(" ","")
-    moveFile='mv '+'*.mkv '+addr+'/'+name+'*.mkv'
-    os.system(moveFile)
-
-os.system('clear')
+    if(platform=="Windows"):
+    	moveFile="move "+"*.mkv"+addr+"/"+name+".mkv"
+    	os.system(moveFile)
+    	os.system('cls')
+    else:
+    	moveFile='mv '+'*.mkv '+addr+'/'+name+'.mkv'
+    	os.system(moveFile)
+    	os.system('clear')
